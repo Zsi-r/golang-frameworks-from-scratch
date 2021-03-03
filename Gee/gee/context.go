@@ -12,7 +12,7 @@ type Context struct {
 	// original objects
 	Writer http.ResponseWriter
 	Req    *http.Request
-	// requese info
+	// request info
 	Path   string
 	Method string
 	Params map[string]string // record the matching relations between the input path and the pattern registered in tri tree

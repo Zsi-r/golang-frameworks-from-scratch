@@ -2,9 +2,9 @@ package geecache
 
 import (
 	"fmt"
-	"geecache/consistenthash"
 	"io/ioutil"
 	"log"
+	"main/geecache/consistenthash"
 	"net/http"
 	"net/url"
 	"strings"

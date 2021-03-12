@@ -36,9 +36,10 @@ func parsePattern(pattern string) []string {
 	return parts
 }
 
+// The top level function in router
 // addRoute calls node.insert to add node
 func (r *router) addRoute(method string, pattern string, handler HandlerFunc) {
-	parts := parsePattern(pattern)
+	parts := parsePattern(pattern) // pattern是完整的一个路由
 
 	key := method + "-" + pattern
 	_, ok := r.roots[method]

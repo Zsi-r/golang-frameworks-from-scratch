@@ -22,10 +22,10 @@ type HTTPPool struct {
 	self     string
 	basePath string
 	mu       sync.Mutex          // guards peers and httpGetters
-	peers    *consistenthash.Map // 根据具体的 key 选择节点。 ?
+	peers    *consistenthash.Map // 根据具体的 key 选择节点。
 	// httpGetters映射远程节点与对应的 httpGetter。
 	// 每一个远程节点对应一个 httpGetter，因为 httpGetter 与远程节点的地址 baseURL 有关。
-	httpGetters map[string]*httpGetter // keyed by e.g. "http://10.0.0.2:8008" ?
+	httpGetters map[string]*httpGetter // keyed by e.g. "http://10.0.0.2:8008"
 }
 
 // NewHTTPPool initializes an HTTP pool of peers.
@@ -76,7 +76,7 @@ func (p *HTTPPool) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (p *HTTPPool) InitPeer(peers ...string) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	p.peers = consistenthash.New(defaultReplicas, nil) // why nil?
+	p.peers = consistenthash.New(defaultReplicas, nil)
 	p.httpGetters = make(map[string]*httpGetter, len(peers))
 	for _, peer := range peers {
 		p.httpGetters[peer] = &httpGetter{baseURL: peer + p.basePath}
@@ -110,7 +110,9 @@ func (h *httpGetter) Get(group string, key string) ([]byte, error) {
 		url.QueryEscape(group),
 		url.QueryEscape(key),
 	)
+	fmt.Println("u: ", u)
 	res, err := http.Get(u)
+	fmt.Println("res: ", res)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +126,7 @@ func (h *httpGetter) Get(group string, key string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("reading response body: %v", err)
 	}
-
+	fmt.Println("bytes: ", bytes)
 	return bytes, nil
 }
 

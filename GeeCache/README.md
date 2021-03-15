@@ -1,4 +1,4 @@
-# Gee
+# GeeCache
 
 A [groupcache](https://github.com/golang/groupcache)-like distributed cache
 

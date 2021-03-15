@@ -65,4 +65,4 @@ func Next() {
 
 - 维护了一个map(名为root)。比如map[GET]=一棵树, map[POST]=另一个树。
 - **注册addRoute函数**：调用parsePattern解析传入的完整路由分割成小的parts数组--->在GET或POST对应的树中调用`tri.insert`插入节点
-- **匹配getRoute函数**：调用parsePattern解析传入的完整路由分割成小的parts数组--->在GET或POST对应的树中调用`tri.search`损招节点，找到后若有`:`或`*`，返回`:name`或`*filepath`的真实映射关系
+- **匹配getRoute函数**：调用parsePattern解析传入的完整路由分割成小的parts数组--->在GET或POST对应的树中调用`tri.search`寻找节点，找到后若有`:`或`*`，返回`:name`或`*filepath`的真实映射关系

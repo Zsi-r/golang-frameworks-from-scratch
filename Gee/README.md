@@ -70,5 +70,36 @@ func Next() {
 - 路由的 **注册** 和 **匹配** 是最重要的
 
 - 维护了一个map(名为root)。比如map[GET]=一棵树, map[POST]=另一个树。
+
 - **注册addRoute函数**：调用parsePattern解析传入的完整路由分割成小的parts数组--->在GET或POST对应的树中调用`tri.insert`插入节点
+
 - **匹配getRoute函数**：调用parsePattern解析传入的完整路由分割成小的parts数组--->在GET或POST对应的树中调用`tri.search`寻找节点，找到后若有`:`或`*`，返回`:name`或`*filepath`的真实映射关系
+
+  
+
+#### Q1：路由分组控制是如何实现的？
+
+=> 定义了RouterGroup，包含了路由字段prefix、中间件middlewares、上层分组parent等，在注册时注册分组
+
+
+
+#### Q2：如何实现错误处理机制？
+
+=> 应用了中间件机制。对所有的context都加入了如下的Recovery中间件。当错误发生时，使用`err := recover()` 收集错误，并打印错误信息。
+
+```go
+func Recovery() HandlerFunc {
+	return func(c *Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				message := fmt.Sprintf("%s", err)
+				log.Printf("%s\n\n", trace(message))
+				c.Fail(http.StatusInternalServerError, "Internal Server Error")
+			}
+		}()
+
+		c.Next()
+	}
+}
+```
+

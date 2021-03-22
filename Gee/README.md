@@ -26,7 +26,7 @@ A [gin](https://github.com/gin-gonic/gin)-like web framework
 
 ### 上下文Context
 
-- route是简历连接的。context是处理这次会话内容的：书写响应、执行中间件。
+- route是用于建立连接的。context是处理这次会话内容的：书写响应、执行中间件。
 
 - 初始化Context时的输入是http.ResponseWriter和*http.Request。Context的作用是进行封装，提取出重要信息，防止写大量重复冗余的代码，比如：
   - http.ResponseWriter：响应response的消息头要设置状态码StatusCode和消息类型ContentType

@@ -6,6 +6,12 @@ A [gin](https://github.com/gin-gonic/gin)-like web framework
 
 最主要的技术点：**前缀树，中间件，分组控制**
 
+- 设计上下文context，封装Request和Response，从而减少代码冗余
+- 设计 Trie 树让Web框架支持动态路由解析
+- 实现路由分组控制(Route Group Control)，使得用户可以对不同分组的路由进行不同处理
+- 为了使用户可以将自定义的handler嵌入到框架中，实现了中间件(Middlewares)机制
+- 实现了错误处理机制防止Web框架因产生panic而崩溃
+
 ### 顶层Engine
 
 - 最顶层是一个Engine（是一种http.Handler，因为实现了ServeHTTP方法）。Engine在main里最后使用的Run(":9999")实际上是调用的是http.ListenAndServe(":9999", engine)

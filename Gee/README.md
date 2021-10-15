@@ -43,9 +43,9 @@ A [gin](https://github.com/gin-gonic/gin)-like web framework
 
 ```go
 func Next() {
-    c.index++ // 重要! 因为并不是每个中间件都会在其结尾调用Next()
+	c.index++ // 重要! 因为并不是每个中间件都会在其结尾调用Next()
 	for (若c.index没超过所有中间件; index++) {  // 即所有中间件还没执行完
-		执行这第c.index个中间件
+		c.handlers[c.index](c) // 执行这第c.index个中间件
 	}
 }
 ```

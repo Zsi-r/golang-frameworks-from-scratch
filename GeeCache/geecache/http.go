@@ -18,14 +18,11 @@ const (
 
 // HTTPPool implements PeerPicker for a pool of HTTP peers.
 type HTTPPool struct {
-	// this peer's base URL, e.g. "https://example.net:8000"
-	self     string
-	basePath string
-	mu       sync.Mutex          // guards peers and httpGetters
-	peers    *consistenthash.Map // 根据具体的 key 选择节点。
-	// httpGetters映射远程节点与对应的 httpGetter。
-	// 每一个远程节点对应一个 httpGetter，因为 httpGetter 与远程节点的地址 baseURL 有关。
-	httpGetters map[string]*httpGetter // keyed by e.g. "http://10.0.0.2:8008"
+	self        string
+	basePath    string                 // "/_geecache/"
+	mu          sync.Mutex             // guards peers and httpGetters
+	peers       *consistenthash.Map    // 一致性哈希算法，根据具体的 key 选择节点。
+	httpGetters map[string]*httpGetter // 如 http://localhost:8001 --> http://localhost:8001/_geecache/
 }
 
 // NewHTTPPool initializes an HTTP pool of peers.
@@ -54,8 +51,8 @@ func (p *HTTPPool) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	groupName := parts[0]
-	key := parts[1]
+	groupName := parts[0] // score
+	key := parts[1]       // Tom
 
 	group := GetGroup(groupName)
 	if group == nil {
@@ -111,7 +108,7 @@ func (h *httpGetter) Get(group string, key string) ([]byte, error) {
 		url.QueryEscape(group),
 		url.QueryEscape(key),
 	)
-	fmt.Println("u: ", u)
+	fmt.Println("u: ", u) // u: score/Tom
 	res, err := http.Get(u)
 	fmt.Println("res: ", res)
 	if err != nil {
